@@ -1,7 +1,44 @@
 library imageable_widget;
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
+import 'dart:ui' as ui;
+
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
+
+class Imageable extends StatelessWidget {
+  Imageable({this.key, this.child});
+
+  Widget child;
+  GlobalKey key;
+
+  @override
+  Widget build(BuildContext context) {
+    return RepaintBoundary(
+      key: key,
+      child: Container(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: child,
+      ),
+    );
+  }
+}
+
+class WidgetToImageConverter {
+  Future<ByteData> exportToImage(GlobalKey globalKey) async {
+    // 現在描画されているWidgetを取得する
+    final boundary =
+        globalKey.currentContext.findRenderObject() as RenderRepaintBoundary;
+
+    // 取得したWidgetからイメージファイルをキャプチャする
+    final image = await boundary.toImage(
+      pixelRatio: 3,
+    );
+
+    // PNG形式化
+    final byteData = await image.toByteData(
+      format: ui.ImageByteFormat.png,
+    );
+    return byteData;
+  }
 }

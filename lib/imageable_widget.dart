@@ -6,17 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
-final globalKey = GlobalKey();
-
 class Imageable extends StatelessWidget {
-  Imageable({this.child});
+  Imageable({this.gKey, this.child});
 
+  final GlobalKey gKey;
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return RepaintBoundary(
-      key: globalKey,
+      key: gKey,
       child: Container(
         color: Theme.of(context).scaffoldBackgroundColor,
         child: child,
@@ -25,7 +24,12 @@ class Imageable extends StatelessWidget {
   }
 }
 
-class WidgetToImageConverter {
+class ImageableController {
+  final globalKey = GlobalKey();
+  Widget builder(Widget child) {
+    return Imageable(gKey: globalKey, child: child);
+  }
+
   Future<ByteData> exportToImage() async {
     // 現在描画されているWidgetを取得する
     final boundary =

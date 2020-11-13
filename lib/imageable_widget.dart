@@ -7,15 +7,15 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
 class Imageable extends StatelessWidget {
-  Imageable({this.key, this.child});
+  Imageable({this.gKey, this.child});
 
-  Widget child;
-  GlobalKey key;
+  final Widget child;
+  final GlobalKey gKey;
 
   @override
   Widget build(BuildContext context) {
     return RepaintBoundary(
-      key: key,
+      key: gKey,
       child: Container(
         color: Theme.of(context).scaffoldBackgroundColor,
         child: child,
